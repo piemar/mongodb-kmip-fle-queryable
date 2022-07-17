@@ -32,13 +32,13 @@ cd kmip
 # Test CSFLE with KMIP as KMS provider
 Python application that inserts a document with CSFLE configured. CSFLE is configured to use HashiCorp Vault KMIP Secrets Engine as KMS provider.
 ```
-cd /kmip/csfle_kmip/
+cd /kmip/csfle_vault_kmip/
 python3 vault_encrypt_with_kmip.py
 ```
 
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder.
 ```
-cd /kmip/csfle_kmip/vault/
+cd /kmip/csfle_vault_kmip/vault/
 rm -rf data
 ```
