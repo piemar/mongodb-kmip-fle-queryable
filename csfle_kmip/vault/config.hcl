@@ -1,6 +1,6 @@
 
 storage "file" {
-  path    = "/kmip/csfle_kmip/vault/data"
+  path    = "csfle_kmip/vault/data"
 }
 
 listener "tcp" {
@@ -9,7 +9,7 @@ listener "tcp" {
 }
 
 disable_mlock = true
-license_path = "/kmip/csfle_kmip/vault/license.txt"
+license_path = "csfle_kmip/vault/license.txt"
 
 api_addr = "http://127.0.0.1:8200"
 cluster_addr = "https://127.0.0.1:8201"

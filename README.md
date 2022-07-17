@@ -17,10 +17,11 @@ docker run -p 8200:8200 -it -v ${PWD}:/kmip piepet/mongodb-csfle:latest
 Running below commands will start Vault Server and configure KMIP Secrets engine. Certificates will be generated, vv-client.pem, vv-ca.pem, vv-key.pem. The CSFLE configuration.py will refer to this certificates.
 ```
 cd kmip
-./configure_kmip_vault.sh
+./start_and_configure_vault.sh
 ```
 
-# Test CSFLE with HashiCorp KeyVault
+# Test CSFLE with KMIP as KMS provider
+Python application that inserts a document with CSFLE configured. CSFLE is configured to use HashiCorp Vault KMIP Secrets Engine as KMS provider.
 ```
 cd /kmip/csfle_kmip/
 python3 vault_encrypt_with_kmip.py
