@@ -1,6 +1,6 @@
 # MongoDB CSFLE with Hashicorp Vault and KMIP
 
-This projects has automated the setup and configuration pf CSFLE with HashiCorp Vault KMIP Secrets Engine.
+Automate setup of CSFLE with HashiCorp Vault KMIP Secrets Engine.
 
 The automation creates the following:
 * Hashicorp Vault Enterprise
