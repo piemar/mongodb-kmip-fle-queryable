@@ -1,10 +1,19 @@
 # MongoDB CSFLE with Hashicorp Vault and KMIP
 
-### Update vault/license.txt with license key
+This projects has automated the setup and configuration pf CSFLE with HashiCorp Vault KMIP Secrets Engine.
+
+The automation creates the following:
+* Hashicorp Vault Enterprise
+* Configures KMIP Secrets Engine
+* Configure Scopes, Roles and other configuration
+* Configures Certificate to be used to authenticate against Vault
+* An test application that inserts a document with where some fields are CSFLE enabled.
+
+# Update vault/license.txt with license key
 Request license key from https://www.hashicorp.com/products/vault/trial and then update license.txt
 
-### Update MongoDB Atlas connection string in file configuration.py line 4
-Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
+# Update MongoDB Atlas connection string
+String in file configuration.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
 ```
 connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>/?retryWrites=true&w=majority"
 ```
