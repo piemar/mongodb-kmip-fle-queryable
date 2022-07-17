@@ -10,10 +10,10 @@ The automation creates the following:
 * An test application that inserts a document with where some fields are CSFLE enabled.
 
 # Update vault/license.txt with license key
-Request license key from https://www.hashicorp.com/products/vault/trial and then update license.txt
+Request license key from https://www.hashicorp.com/products/vault/trial and then update csfle_vault_kmip/vault/license.txt
 
 # Update MongoDB Atlas connection string
-String in file configuration.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
+String in file csfle_vault_kmip/configuration.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
 ```
 connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>/?retryWrites=true&w=majority"
 ```
