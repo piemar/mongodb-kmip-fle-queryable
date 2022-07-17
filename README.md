@@ -29,6 +29,6 @@ python3 vault_encrypt_with_kmip.py
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder.
 ```
-cd /kmip/vault/
+cd /kmip/csfle_kmip/vault/
 rm -rf data
 ```
