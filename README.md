@@ -37,6 +37,8 @@ python3 vault_encrypt_with_kmip.py
 ```
 The application will automatically encrypt/decrypt the fields defined in the validation schema thats attached to the users collection. Fields that should be shown encrypted are ssn, contact.mobile, contact.email
 
+You should now be able to see in compass that fields that are encrypted have ****** shown as value. 
+
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder.
 ```

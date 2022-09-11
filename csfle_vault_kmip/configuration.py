@@ -1,7 +1,7 @@
 
 encrypted_namespace = "DEMO-CSFLE-KMIP.users"
 key_vault_namespace = "DEMO-CSFLE-KMIP.datakeys"
-connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>?retryWrites=true&w=majority"
+connection_uri = "mongodb+srv://admin:Vartavag14@demo-cluster.tcrpd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 # Configure the "kmip" provider.
 kms_providers = {
     "kmip": {
