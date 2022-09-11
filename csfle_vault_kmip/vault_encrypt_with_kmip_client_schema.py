@@ -9,6 +9,7 @@ import configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
 from bson import json_util
+
 from pymongo import MongoClient
 from pymongo.encryption import (Algorithm,
                                 ClientEncryption)
@@ -37,7 +38,7 @@ def configure_data_keys(kmip_configuration):
     encryption_data_keys = {"key1": data_key_id_1,"key2":data_key_id_2}
     return encryption_data_keys
 
-
+def configure_csfle_schema(data_keys):
     schema = {
     "bsonType": "object",
     "properties": {
@@ -81,50 +82,20 @@ def configure_data_keys(kmip_configuration):
     }
     }
     return schema
-def configure_csfle_session():
+def configure_csfle_session(schema):
+    # Load the JSON Schema and construct the local schema_map option.    
+    schema_map = {configuration.encrypted_namespace: schema}
+
     auto_encryption_opts = AutoEncryptionOpts(
-        configuration.kms_providers, configuration.key_vault_namespace, kms_tls_options=configuration.kms_tls_options)
+        configuration.kms_providers, configuration.key_vault_namespace, schema_map=schema_map, kms_tls_options=configuration.kms_tls_options)
     return auto_encryption_opts
 
-def create_collection_with_schema_validation(data_keys):
-    db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    db = MongoClient(configuration.connection_uri)[db_name]
-    db.create_collection(name="users",
-                             validator={"$jsonSchema": {
-                                 "bsonType": "object",
-                                 "properties": {
-                                    "contact": {
-                                        "bsonType": "object",
-                                        "properties": {
-                                            "email"   : {
-                                            "encrypt": {
-                                                "bsonType": "string",
-                                                "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                                                "keyId": [ data_keys["key2"] ]
-                                            }
-                                            },
-                                            "mobile"  : {
-                                            "encrypt": {
-                                                "bsonType": "string",
-                                                "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                                                "keyId": [ data_keys["key2"] ]
-                                            }
-                                            }
-                                        },
-                                    },                                   
-                                     "ssn": {
-                                        "encrypt": {
-                                            "bsonType": "string",
-                                            "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                                            "keyId": [ data_keys["key1"] ]
-                                        }
-                                     },
-                                 }
-                             }},
-                             validationAction="error",
-                             )    
 def reset():    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
+    coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
+    # Clear old data
+    coll.drop()
+    db_name, coll_name = configuration.key_vault_namespace.split(".", 1)
     coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
     # Clear old data
     coll.drop()
@@ -148,13 +119,13 @@ def create_user(csfle_options):
             "email":  'alan@example.com'
         }
     })
+        
     print("Decrypted document:")
     print("===================")    
     pprint((coll.find_one()))
     unencrypted_coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
     print("Encrypted document:")
     print("===================")    
-
     pprint((unencrypted_coll.find_one()))
 
 def configure_kmip_provider():
@@ -166,9 +137,9 @@ def main():
     kmip_provider_config = configure_kmip_provider()
     #3 Configure Encryption Data Keys
     data_keys_config = configure_data_keys(kmip_provider_config)
-    #4 Create collection with Validation Schema for CSFLE defined, will be stored in database
-    create_collection_with_schema_validation(data_keys_config)
+    #4 Configure JSON Schema
+    schema_config = configure_csfle_schema(data_keys_config)
     #5 Run Query
-    create_user(configure_csfle_session())
+    create_user(configure_csfle_session(schema_config))
 if __name__ == "__main__":
     main()
