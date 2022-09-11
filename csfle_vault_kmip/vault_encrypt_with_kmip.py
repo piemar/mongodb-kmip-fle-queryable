@@ -43,6 +43,8 @@ def configure_csfle_session():
     return auto_encryption_opts
 
 def create_collection_with_schema_validation(data_keys):
+    # We are creating a collection that has an validation schema attached, 
+    # that uses the encrypt attribute to define which fields should be encrypted.
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
     db = MongoClient(configuration.connection_uri)[db_name]
     db.create_collection(name="users",

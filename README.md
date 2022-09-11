@@ -35,6 +35,7 @@ Python application that inserts a document with CSFLE configured. CSFLE is confi
 cd /kmip/csfle_vault_kmip/
 python3 vault_encrypt_with_kmip.py
 ```
+The application will decrypt the fields defined in the collections validation schema. Fields that should be shown encrypted are ssn, contact.mobile, contact.email
 
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder.
