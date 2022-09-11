@@ -37,50 +37,6 @@ def configure_data_keys(kmip_configuration):
     encryption_data_keys = {"key1": data_key_id_1,"key2":data_key_id_2}
     return encryption_data_keys
 
-
-    schema = {
-    "bsonType": "object",
-    "properties": {
-        "firstName": { "bsonType": "string" }, 
-        "lastName":  { "bsonType": "string" },
-        "ssn": {
-            "encrypt": {
-                "bsonType": "string",
-                "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                "keyId": [ data_keys["key1"] ]
-            }
-        },
-        "address": {
-            "bsonType": "object",
-            "properties": {
-                "street" : { "bsonType": "string"  },
-                "city"   : { "bsonType": "string"  },
-                "state"  : { "bsonType": "string"  },
-                "zip"    : { "bsonType": "string" }
-            }
-        },
-        "contact": {
-            "bsonType": "object",
-            "properties": {
-                "email"   : {
-                "encrypt": {
-                    "bsonType": "string",
-                    "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                    "keyId": [ data_keys["key2"] ]
-                }
-                },
-                "mobile"  : {
-                "encrypt": {
-                    "bsonType": "string",
-                    "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-                    "keyId": [ data_keys["key2"] ]
-                }
-                }
-            },
-        },
-    }
-    }
-    return schema
 def configure_csfle_session():
     auto_encryption_opts = AutoEncryptionOpts(
         configuration.kms_providers, configuration.key_vault_namespace, kms_tls_options=configuration.kms_tls_options)
