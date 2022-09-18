@@ -1,16 +1,16 @@
 # MongoDB CSFLE with Hashicorp Vault and KMIP
 
-Automate setup of CSFLE with HashiCorp Vault KMIP Secrets Engine.
+Automate setup of CSFLE and Queryable Encrption with HashiCorp Vault KMIP Secrets Engine.
 
 The automation creates the following:
 * Hashicorp Vault Enterprise
 * Configures KMIP Secrets Engine
 * Configure Scopes, Roles and other configuration
 * Configures Certificate to be used to authenticate against Vault
-* An test application that inserts a document with where some fields are CSFLE enabled.
+* An test application that inserts a document with where some fields are CSFLE and Queryable Encryption enabled.
 
 # Update vault/license.txt with license key
-Request license key from https://www.hashicorp.com/products/vault/trial and then update csfle_vault_kmip/vault/license.txt
+Request license key from https://www.hashicorp.com/products/vault/trial and then update kmip-with-hashicorp-key-vault/vault/license.txt
 
 # Update MongoDB Atlas connection string
 String in file csfle_vault_kmip/configuration.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
@@ -29,12 +29,27 @@ cd kmip
 ./start_and_configure_vault.sh
 ```
 
-# Test CSFLE with KMIP as KMS provider
+# Test KMIP as KMS provider
 Python application that inserts a document with CSFLE configured. CSFLE is configured to use HashiCorp Vault KMIP Secrets Engine as KMS provider.
+
+## CSFLE Schema Stored in Database
 ```
-cd /kmip/csfle_vault_kmip/
-python3 vault_encrypt_with_kmip.py
+cd /kmip/kmip-with-hashicorp-key-vault/
+python3.8 vault_encrypt_with_csfle_kmip.py
 ```
+
+## CSFLE Schema Stored in Client
+```
+cd /kmip/kmip-with-hashicorp-key-vault/
+python3.8 vault_encrypt_with_csfle_kmip_client_schema.py
+```
+
+## Queryable Encryption
+```
+cd /kmip/kmip-with-hashicorp-key-vault/
+python3.8 vault_encrypt_with_queryable_kmip.py
+```
+
 The application will automatically encrypt/decrypt the fields defined in the validation schema thats attached to the users collection. Fields that should be shown encrypted are ssn, contact.mobile, contact.email
 
 You should now be able to see in compass that fields that are encrypted have ****** shown as value. 
@@ -42,6 +57,6 @@ You should now be able to see in compass that fields that are encrypted have ***
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder.
 ```
-cd /kmip/csfle_vault_kmip/vault/
+cd /kmip/kmip-with-hashicorp-key-vault/vault/
 rm -rf data
 ```
