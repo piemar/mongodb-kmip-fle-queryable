@@ -1,6 +1,10 @@
-# MongoDB CSFLE with Hashicorp Vault and KMIP
+# MongoDB CSFLE and Queryable Encryption with Hashicorp Vault and KMIP
 
-Automate setup of CSFLE and Queryable Encrption with HashiCorp Vault KMIP Secrets Engine.
+__Automate setup of CSFLE and Queryable Encrption with HashiCorp Vault KMIP Secrets Engine__
+
+__SA Maintainer__: [Pierre Petersson](mailto:pierre.petersson@mongodb.com) <br/>
+__Time to setup__: 2 mins <br/>
+__Time to execute__: 5 mins <br/>
 
 The automation creates the following:
 * Hashicorp Vault Enterprise
@@ -33,18 +37,24 @@ cd kmip
 Python application that inserts a document with CSFLE configured. CSFLE is configured to use HashiCorp Vault KMIP Secrets Engine as KMS provider.
 
 ## CSFLE Schema Stored in Database
+Will create a database with name DEMO-KMIP-FLE where the keyvault collection and the user collection will be created.
+
 ```
 cd /kmip/kmip-with-hashicorp-key-vault/
 python3.8 vault_encrypt_with_csfle_kmip.py
 ```
 
 ## CSFLE Schema Stored in Client
+Will create a database with name DEMO-KMIP-FLE where the keyvault collection and the user collection will be created.
+
 ```
 cd /kmip/kmip-with-hashicorp-key-vault/
 python3.8 vault_encrypt_with_csfle_kmip_client_schema.py
 ```
 
 ## Queryable Encryption
+Will create a database with name DEMO-KMIP-QUERYABLE where the keyvault collection and the user collection will be created.
+
 ```
 cd /kmip/kmip-with-hashicorp-key-vault/
 python3.8 vault_encrypt_with_queryable_kmip.py
@@ -55,8 +65,7 @@ The application will automatically encrypt/decrypt the fields defined in the val
 You should now be able to see in compass that fields that are encrypted have ****** shown as value. 
 
 # Cleanup
-If you want to rerun setup, delete vault/data folder. only the data folder.
+If you want to rerun setup, delete vault/data folder. only the data folder. Run the following in root of this pov.
 ```
-cd /kmip/kmip-with-hashicorp-key-vault/vault/
-rm -rf data
+./cleanup.sh
 ```

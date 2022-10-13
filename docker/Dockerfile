@@ -69,5 +69,5 @@ RUN python3.8 -m pip install pymongo
 RUN python3.8 -m pip install dnspython
 RUN python3.8 -m pip install pykmip
 RUN python3.8 -m pip install pymongocrypt 
-RUN mkdir /csfle_shared_lib
-COPY mongo_crypt_v1.so /csfle_shared_lib/mongo_crypt_v1.so
+RUN mkdir /shared_lib
+COPY mongo_crypt_v1.so /shared_lib/mongo_crypt_v1.so

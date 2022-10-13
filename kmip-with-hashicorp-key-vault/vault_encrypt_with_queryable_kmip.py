@@ -5,7 +5,7 @@ Example modified from https://pymongo.readthedocs.io/en/stable/examples/encrypti
 import json
 from multiprocessing import connection
 import os
-import configuration
+import configuration_queryable as configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
 from bson import json_util
@@ -34,7 +34,6 @@ def configure_data_keys(kmip_configuration):
 
     data_key_id_2 = client_encryption.create_data_key(
         'kmip', key_alt_names=['pymongo_encryption_example_2'])
-    encryption_data_keys = {"key1": data_key_id_1,"key2":data_key_id_2}
 
     data_key_id_3 = client_encryption.create_data_key(
         'kmip', key_alt_names=['pymongo_encryption_example_3'])
@@ -57,7 +56,7 @@ def configure_queryable_session(encrypted_fields_schema):
 def create_schema(data_keys):
     # We are creating a collection that has an validation schema attached, 
     # that uses the encrypt attribute to define which fields should be encrypted.
-    encrypted_db_name = "DEMO-CSFLE-KMIP"
+    encrypted_db_name = configuration.database_namespace
     encrypted_coll_name = "users"
     encrypted_fields_map = {
         f"{encrypted_db_name}.{encrypted_coll_name}": {
@@ -112,7 +111,7 @@ def create_user(csfle_options):
     })
     print("Queryable Encryption: Decrypted document:")
     print("===================")    
-    pprint((coll.find_one()))
+    pprint((coll.find_one({"ssn":"901-01-0001"})))
     unencrypted_coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
     print("Queryable Encryption: Encrypted document:")
     print("===================")    

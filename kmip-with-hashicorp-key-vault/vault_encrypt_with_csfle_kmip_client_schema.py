@@ -5,7 +5,7 @@ Example modified from https://pymongo.readthedocs.io/en/stable/examples/encrypti
 import json
 from multiprocessing import connection
 import os
-import configuration
+import configuration_fle as configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
 from bson import json_util
@@ -119,15 +119,14 @@ def create_user(csfle_options):
             "email":  'alan@example.com'
         }
     })
-        
-    print("CSFLE-CLIENT-SCEHMA: Decrypted document:")
+    print("CSFLE Encryption: Decrypted document:")
     print("===================")    
-    pprint((coll.find_one()))
+    pprint((coll.find_one({"ssn":"901-01-0001"})))
     unencrypted_coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
-    print("CSFLE-CLIENT-SCEHMA: Encrypted document:")
+    print("CSFLE Encryption: Encrypted document:")
     print("===================")    
     pprint((unencrypted_coll.find_one()))
-
+        
 def configure_kmip_provider():
     return {"kms_providers":configuration.kms_providers,"kms_tls_options":configuration.kms_tls_options}
 
