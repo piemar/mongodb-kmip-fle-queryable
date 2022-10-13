@@ -25,7 +25,7 @@ For Queryable: Change String in file kmip-with-hashicorp-key-vault/configuration
 connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>/?retryWrites=true&w=majority"
 ```
 # Start Docker Container
-A prebaked docker image that has HashiCorp Vault installed, start container in root of this repo
+A prebaked docker image that has HashiCorp Vault installed, and mongodb shared library start container in root of this repo
 ```
 docker run -p 8200:8200 -it -v ${PWD}:/kmip piepet/mongodb-csfle:latest
 ```
