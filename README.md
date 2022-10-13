@@ -17,7 +17,10 @@ The automation creates the following:
 Request license key from https://www.hashicorp.com/products/vault/trial and then update kmip-with-hashicorp-key-vault/vault/license.txt
 
 # Update MongoDB Atlas connection string
-String in file csfle_vault_kmip/configuration.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
+For FLE: Change String in file kmip-with-hashicorp-key-vault/configuration_fle.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
+
+For Queryable: Change String in file kmip-with-hashicorp-key-vault/configuration_queryable.py line 4, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String
+
 ```
 connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>/?retryWrites=true&w=majority"
 ```
