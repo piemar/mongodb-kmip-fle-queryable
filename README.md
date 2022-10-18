@@ -67,6 +67,17 @@ The application will automatically encrypt/decrypt the fields defined in the val
 
 You should now be able to see in compass that fields that are encrypted have ****** shown as value. 
 
+## Key rotation
+Decrypt multiple Data Encryption Keys (DEK) and re-encrypts them with a new Customer Master Key (CMK). Use this method to rotate the CMK that encrypts your DEKs. 
+
+```
+## FLE MasterKeys and DEKS
+python3.8 rotate_fle.py
+
+## Queryable Encryption MasterKeys and DEKS
+./ python3.8 rotate_queryable.py 
+```
+
 # Cleanup
 If you want to rerun setup, delete vault/data folder. only the data folder. Run the following in root of this pov.
 ```

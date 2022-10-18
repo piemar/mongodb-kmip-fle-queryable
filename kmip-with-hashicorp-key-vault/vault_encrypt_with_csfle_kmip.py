@@ -89,6 +89,7 @@ def reset():
 
 def create_user(csfle_options):
     mongo_client_csfle = MongoClient(configuration.connection_uri,auto_encryption_opts=csfle_options)    
+    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
     coll = mongo_client_csfle[db_name][coll_name]
     # Clear old data
