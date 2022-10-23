@@ -1,6 +1,5 @@
 """
 Automatically encrypt and decrypt a field with a KMIP KMS provider.
-Example modified from https://pymongo.readthedocs.io/en/stable/examples/encryption.html#providing-local-automatic-encryption-rules
 """
 import json
 from multiprocessing import connection
@@ -15,6 +14,13 @@ from pymongo.encryption import (Algorithm,
 from pymongo.encryption_options import AutoEncryptionOpts
 
 def configure_data_keys(kmip_configuration):
+    db_name, coll_name = configuration.key_vault_namespace.split(".", 1)
+    key_vault_client = MongoClient(configuration.connection_uri)
+    key_vault_client[db_name][coll_name].create_index(
+    [("keyAltNames", 1)],
+    unique=True,
+    partialFilterExpression={"keyAltNames": {"$exists": True}},
+)
     client_encryption = ClientEncryption(
     kmip_configuration["kms_providers"],
     configuration.key_vault_namespace,

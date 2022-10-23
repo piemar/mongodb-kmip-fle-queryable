@@ -57,7 +57,7 @@ def create_collection_with_schema_validation(data_keys):
                                             "email"   : {
                                             "encrypt": {
                                                 "bsonType": "string",
-                                                "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
+                                                "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Random",
                                                 "keyId": [ data_keys["key2"] ]
                                             }
                                             },
@@ -89,7 +89,6 @@ def reset():
 
 def create_user(csfle_options):
     mongo_client_csfle = MongoClient(configuration.connection_uri,auto_encryption_opts=csfle_options)    
-    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
     coll = mongo_client_csfle[db_name][coll_name]
     # Clear old data
