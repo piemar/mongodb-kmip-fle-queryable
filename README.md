@@ -109,7 +109,7 @@ Before running rotate:
 python3.8 rotate_fle.py
 
 ## Queryable Encryption MasterKeys and DEKS
-./ python3.8 rotate_queryable.py 
+python3.8 rotate_queryable.py 
 ```
 After running rotate:
 
