@@ -1,40 +1,28 @@
 """
 Automatically encrypt and decrypt a field with a KMIP KMS provider.
 """
-import json
-from multiprocessing import connection
-import os
 import configuration_queryable as configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
-from bson import json_util
 from pymongo import MongoClient
-from pymongo.encryption import (Algorithm,
-                                ClientEncryption)
+from pymongo.encryption import ClientEncryption
 from pymongo.encryption_options import AutoEncryptionOpts
 
 def configure_data_keys(kmip_configuration):
     db_name, coll_name = configuration.key_vault_namespace.split(".", 1)
     key_vault_client = MongoClient(configuration.connection_uri)
     key_vault_client[db_name][coll_name].create_index(
-    [("keyAltNames", 1)],
-    unique=True,
-    partialFilterExpression={"keyAltNames": {"$exists": True}},
-)
+        [("keyAltNames", 1)],unique=True,partialFilterExpression={"keyAltNames": {"$exists": True}}
+    )
     client_encryption = ClientEncryption(
-    kmip_configuration["kms_providers"],
-    configuration.key_vault_namespace,
-    MongoClient(configuration.connection_uri),
-    # The CodecOptions class used for encrypting and decrypting.
-    # This should be the same CodecOptions instance you have configured
-    # on MongoClient, Database, or Collection. We will not be calling
-    # encrypt() or decrypt() in this example so we can use any
-    # CodecOptions.
-    CodecOptions(),
-    kms_tls_options=kmip_configuration["kms_tls_options"])
+        kmip_configuration["kms_providers"],
+        configuration.key_vault_namespace,
+        MongoClient(configuration.connection_uri),
+        CodecOptions(),
+        kms_tls_options=kmip_configuration["kms_tls_options"]
+    )
 
     # Create a new data key and json schema for the encryptedField.
-    # https://dochub.mongodb.org/core/client-side-field-level-encryption-automatic-encryption-rules
     data_key_id_1 = client_encryption.create_data_key(
         'kmip', key_alt_names=['pymongo_encryption_example_1'])
 
@@ -57,13 +45,13 @@ def configure_queryable_session(encrypted_fields_schema):
         schema_map=None,
         crypt_shared_lib_path=configuration.shared_library_path
     )
-    return auto_encryption
+    secure_client = MongoClient(configuration.connection_uri,auto_encryption_opts=auto_encryption)
+    return secure_client;
 
 def create_schema(data_keys):
-    # We are creating a collection that has an validation schema attached, 
+    # We are creating a encrypted_fields_map that has an validation schema attached, 
     # that uses the encrypt attribute to define which fields should be encrypted.
-    encrypted_db_name = configuration.database_namespace
-    encrypted_coll_name = "users"
+    encrypted_db_name, encrypted_coll_name = configuration.encrypted_namespace.split(".", 1)
     encrypted_fields_map = {
         f"{encrypted_db_name}.{encrypted_coll_name}": {
             "fields": [
@@ -92,15 +80,17 @@ def create_schema(data_keys):
 
 def reset():    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
-    # Clear old data
-    coll.drop()
+    mongo_client = MongoClient(configuration.connection_uri)
+    mongo_client.drop_database(db_name)
 
-def create_user(csfle_options):
-    mongo_client_csfle = MongoClient(configuration.connection_uri,auto_encryption_opts=csfle_options)    
+def create_user(secure_client):
+    # Create Encrypted Collection
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    coll = mongo_client_csfle[db_name][coll_name]
-    # Clear old data
+    db=secure_client[db_name]
+    db.create_collection(coll_name)
+
+    # Insert encrypted record
+    coll = secure_client[db_name][coll_name]
     coll.insert_one({
         "firstName": 'Alan',
         "lastName":  'Turing',
@@ -135,7 +125,9 @@ def main():
     data_keys_config = configure_data_keys(kmip_provider_config)
     #4 Create Schema for Queryable Encryption, will be stored in database
     encrypted_fields_map = create_schema(data_keys_config)
-    #5 Run Query
-    create_user(configure_queryable_session(encrypted_fields_map))
+    #5 Configure Encrypted Client
+    secure_client = configure_queryable_session(encrypted_fields_map)
+    #6 Run Query
+    create_user(secure_client)
 if __name__ == "__main__":
     main()

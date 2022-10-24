@@ -92,13 +92,8 @@ def configure_csfle_session(schema):
 
 def reset():    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
-    # Clear old data
-    coll.drop()
-    db_name, coll_name = configuration.key_vault_namespace.split(".", 1)
-    coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
-    # Clear old data
-    coll.drop()
+    mongo_client = MongoClient(configuration.connection_uri)
+    mongo_client.drop_database(db_name)
 
 def create_user(csfle_options):
     mongo_client_csfle = MongoClient(configuration.connection_uri,auto_encryption_opts=csfle_options)    

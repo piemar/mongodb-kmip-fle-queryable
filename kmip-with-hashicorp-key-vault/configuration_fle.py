@@ -1,4 +1,3 @@
-database_namespace = "DEMO-KMIP-FLE"
 encrypted_namespace = "DEMO-KMIP-FLE.users"
 key_vault_namespace = "DEMO-KMIP-FLE.datakeys"
 connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>?retryWrites=true&w=majority"

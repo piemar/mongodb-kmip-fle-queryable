@@ -2,33 +2,27 @@
 Automatically encrypt and decrypt a field with a KMIP KMS provider.
 Example modified from https://pymongo.readthedocs.io/en/stable/examples/encryption.html#providing-local-automatic-encryption-rules
 """
-import json
-from multiprocessing import connection
-import os
 import configuration_fle as configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
-from bson import json_util
 from pymongo import MongoClient
-from pymongo.encryption import (Algorithm,
-                                ClientEncryption)
+from pymongo.encryption import ClientEncryption
 from pymongo.encryption_options import AutoEncryptionOpts
 
 def configure_data_keys(kmip_configuration):
     client_encryption = ClientEncryption(
-    kmip_configuration["kms_providers"],
-    configuration.key_vault_namespace,
-    MongoClient(configuration.connection_uri),
-    # The CodecOptions class used for encrypting and decrypting.
-    # This should be the same CodecOptions instance you have configured
-    # on MongoClient, Database, or Collection. We will not be calling
-    # encrypt() or decrypt() in this example so we can use any
-    # CodecOptions.
-    CodecOptions(),
-    kms_tls_options=kmip_configuration["kms_tls_options"])
+        kmip_configuration["kms_providers"],
+        configuration.key_vault_namespace,
+        MongoClient(configuration.connection_uri),
+        # The CodecOptions class used for encrypting and decrypting.
+        # This should be the same CodecOptions instance you have configured
+        # on MongoClient, Database, or Collection. We will not be calling
+        # encrypt() or decrypt() in this example so we can use any
+        # CodecOptions.
+        CodecOptions(),
+        kms_tls_options=kmip_configuration["kms_tls_options"]
+    )
 
-    # Create a new data key and json schema for the encryptedField.
-    # https://dochub.mongodb.org/core/client-side-field-level-encryption-automatic-encryption-rules
     data_key_id_1 = client_encryption.create_data_key(
         'kmip', key_alt_names=['pymongo_encryption_example_1'])
 
@@ -40,14 +34,16 @@ def configure_data_keys(kmip_configuration):
 def configure_csfle_session():
     auto_encryption_opts = AutoEncryptionOpts(
         configuration.kms_providers, configuration.key_vault_namespace, kms_tls_options=configuration.kms_tls_options)
-    return auto_encryption_opts
+    secure_client = MongoClient(configuration.connection_uri,auto_encryption_opts=auto_encryption_opts)        
+    return secure_client
 
 def create_collection_with_schema_validation(data_keys):
     # We are creating a collection that has an validation schema attached, 
     # that uses the encrypt attribute to define which fields should be encrypted.
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
     db = MongoClient(configuration.connection_uri)[db_name]
-    db.create_collection(name="users",
+    
+    db.create_collection(name=f"{coll_name}",
                              validator={"$jsonSchema": {
                                  "bsonType": "object",
                                  "properties": {
@@ -83,14 +79,14 @@ def create_collection_with_schema_validation(data_keys):
                              )    
 def reset():    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    coll = MongoClient(configuration.connection_uri)[db_name][coll_name]
-    # Clear old data
-    coll.drop()
+    mongo_client = MongoClient(configuration.connection_uri)
+    mongo_client.drop_database(db_name)
 
-def create_user(csfle_options):
-    mongo_client_csfle = MongoClient(configuration.connection_uri,auto_encryption_opts=csfle_options)    
+
+def create_user(secure_client):
+    
     db_name, coll_name = configuration.encrypted_namespace.split(".", 1)
-    coll = mongo_client_csfle[db_name][coll_name]
+    coll = secure_client[db_name][coll_name]
     # Clear old data
     coll.insert_one({
         "firstName": 'Alan',
@@ -126,7 +122,9 @@ def main():
     data_keys_config = configure_data_keys(kmip_provider_config)
     #4 Create collection with Validation Schema for CSFLE defined, will be stored in database
     create_collection_with_schema_validation(data_keys_config)
-    #5 Run Query
-    create_user(configure_csfle_session())
+    #5 Configure Encrypted Client
+    secure_client=configure_csfle_session()
+    #6 Run Query
+    create_user(secure_client)
 if __name__ == "__main__":
     main()
