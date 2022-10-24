@@ -41,20 +41,6 @@ configureRolesAndScopes()
     echo "Root Token: ${root_token}"
     echo "==========================================="    
 }
-function old()
-{
-vault write demo/kmip/scope/mongodb/role/QUERYABLE tls_client_key_bits=2048 tls_client_key_type=rsa operation_all=true
-vault write -format=json \
-    demo/kmip/scope/mongodb/role/QUERYABLE/credential/generate \
-    format=pem > queryable_credential.json
-serial_number=$(jq -r .data.serial_number < queryable_credential.json)
-jq -r .data.certificate < queryable_credential.json > kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-ca.pem
-jq -r .data.private_key < queryable_credential.json > kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-key.pem    
-cat kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-ca.pem kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-key.pem > kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-client.pem
-vault read demo/kmip/scope/mongodb/role/QUERYABLE/credential/lookup \serial_number=$serial_number -format=json > queryable_ca_chain.json
-jq -r .data.certificate < queryable_ca_chain.json > kmip-with-hashicorp-key-vault/vault/certs/queryable/vv-ca.pem    
-rm -rf *.json
-}
 
 option="${1}"
 case ${option} in -f) 
