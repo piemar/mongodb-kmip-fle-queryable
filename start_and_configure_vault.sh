@@ -45,6 +45,7 @@ configureRolesAndScopes()
 option="${1}"
 case ${option} in -f) 
 echo "Configuring Roles and Scopes for FLE Encryption"
+startAndInitializeKeyVault
 configureRolesAndScopes FLE;;
 -q) 
 echo "Configuring Roles and Scopes for Queryable Encryption"
