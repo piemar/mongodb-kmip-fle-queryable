@@ -10,7 +10,7 @@ kms_providers = {
 }
 kms_tls_options = {
     "kmip": {
-        "tlsCAFile": "vault/certs/fle/vv-ca.pem",
-        "tlsCertificateKeyFile": "vault/certs/fle/vv-client.pem"
+        "tlsCAFile": "vault/certs/FLE/vv-ca.pem",
+        "tlsCertificateKeyFile": "vault/certs/FLE/vv-client.pem"
     }
 }
