@@ -120,3 +120,19 @@ If you want to rerun setup, delete vault/data folder. only the data folder. Run 
 ```
 ./cleanup.sh
 ```
+
+# Additional Resources
+## Client-Side Field Level Encryption The Next Generation of Privacy & Security MDBW22 Video </br>
+https://www.youtube.com/watch?v=KBMfaEzxNFk
+
+## Whitepaper CSFLE 
+https://www.mongodb.com/collateral/field-level-encryption
+
+## CSFLE Multi Cloud Environments MDBW22 Video
+https://www.youtube.com/watch?v=bfyxplG1DVg&list=PL4RCxklHWZ9tKWSS21BmtFxOs51f-l1o9&index=33&t=9s
+
+## Queryable Encryption Resources
+Docs (very much a WIP): https://www.mongodb.com/docs/upcoming/core/queryable-encryption/ </br>
+Blog post: https://www.mongodb.com/blog/post/mongodb-releases-queryable-encryption-preview </br>
+Product page & FAQ: https://mongodb.com/products/queryable-encryption </br>
+
