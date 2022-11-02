@@ -30,7 +30,7 @@ connection_uri = "mongodb+srv://<USER>:<PASSWORD>@<CLUSTER-NAME>/?retryWrites=tr
 # Start Docker Container
 A prebaked docker image that has HashiCorp Vault installed, and mongodb shared library start container in root of this repo
 ```
-docker run -p 8200:8200 -it -v ${PWD}:/kmip piepet/mongodb-csfle:latest
+docker run -p 8200:8200 -it -v ${PWD}:/kmip piepet/mongodb-kmip-vault:latest
 ```
 # Start Vault and configure vault
 Running below commands will start Vault Server and configure KMIP Secrets engine. Certificates will be generated, vv-client.pem, vv-ca.pem, vv-key.pem. The CSFLE configuration.py will refer to this certificates.
@@ -135,4 +135,10 @@ https://www.youtube.com/watch?v=bfyxplG1DVg&list=PL4RCxklHWZ9tKWSS21BmtFxOs51f-l
 Docs (very much a WIP): https://www.mongodb.com/docs/upcoming/core/queryable-encryption/ </br>
 Blog post: https://www.mongodb.com/blog/post/mongodb-releases-queryable-encryption-preview </br>
 Product page & FAQ: https://mongodb.com/products/queryable-encryption </br>
+
+## To build and push docker file
+```
+docker buildx create --name builder —use
+docker buildx build --push --platform linux/amd64,linux/arm64 --tag piepet/mongodb-kmip-vault:latest .
+```
 
