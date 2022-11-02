@@ -42,8 +42,8 @@ def configure_queryable_session(encrypted_fields_schema):
         configuration.key_vault_namespace,
         encrypted_fields_map=encrypted_fields_schema,
         kms_tls_options=configuration.kms_tls_options,
-        schema_map=None,
-        crypt_shared_lib_path=configuration.shared_library_path
+        schema_map=None
+        
     )
     secure_client = MongoClient(configuration.connection_uri,auto_encryption_opts=auto_encryption)
     return secure_client;
