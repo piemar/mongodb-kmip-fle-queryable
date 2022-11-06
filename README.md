@@ -18,6 +18,19 @@ Request license key from https://www.hashicorp.com/products/vault/trial and then
 <br/>
 <img src="img/trial_license_register.png" width="200">
 <img src="img/license.png" width="200">
+# Encryption Terminoligy
+<img src="img/envelope_encryption.png"></br>
+
+__Customer Master Key (CMK)__, is the encryption key used to protect(encrypt) the Data Encryption Keys, which is on the top level of the encryption hierarchy.
+
+__The Data Encryption Key (DEK)__ is used to encrypt the data that is plain text. Once plain text is encrypted by the DEK it will be in cipher text. 
+
+__Plain text data__ is unencrypted information that you wish to protect, 
+
+
+__Cipher text__ is Encrypted information unreadable by a human or computer without decryption.
+
+__Envelope encryption__ is the practice of encrypting plain text data with a data encryption key (DEK) and then encrypting the data key using the customer master key.
 
 # Update MongoDB Atlas connection string
 For FLE: Change String in file kmip-with-hashicorp-key-vault/configuration_fle.py line 3, Replace USER, PASSWORD, CLUSTER NAME with your Atlas Connection String

@@ -7,7 +7,7 @@ from pymongo.encryption import ClientEncryption
 def rotate():
     client = MongoClient(configuration.connection_uri)
     client_encryption = ClientEncryption(
-        configuration.kms_providers,  # pass in the kms_providers variable from the previous step
+        configuration.kms_providers,
         configuration.key_vault_namespace,
         client,
         CodecOptions(),
@@ -20,8 +20,6 @@ def rotate():
 
 
 def main():
-    #1,2 Configure your KMIP Provider and Certificates
-    #kmip_provider_config = configure_kmip_provider()    
     rotate()
 if __name__ == "__main__":
     main()

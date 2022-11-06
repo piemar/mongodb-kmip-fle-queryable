@@ -1,7 +1,3 @@
-"""
-Automatically encrypt and decrypt a field with a KMIP KMS provider.
-Example modified from https://pymongo.readthedocs.io/en/stable/examples/encryption.html#providing-local-automatic-encryption-rules
-"""
 import configuration_fle as configuration
 from pprint import pprint
 from bson.codec_options import CodecOptions
@@ -12,7 +8,7 @@ from pymongo.encryption import ClientEncryption
 def rotate():
     client = MongoClient(configuration.connection_uri)
     client_encryption = ClientEncryption(
-        configuration.kms_providers,  # pass in the kms_providers variable from the previous step
+        configuration.kms_providers,  
         configuration.key_vault_namespace,
         client,
         CodecOptions(),
