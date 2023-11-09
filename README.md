@@ -138,8 +138,12 @@ If you want to rerun setup, delete vault/data folder. only the data folder. Run 
 ## Client-Side Field Level Encryption The Next Generation of Privacy & Security MDBW22 Video </br>
 https://www.youtube.com/watch?v=KBMfaEzxNFk
 
+## Documentation CSFLE
+https://www.mongodb.com/docs/manual/core/csfle/
+
 ## Whitepaper CSFLE 
 https://www.mongodb.com/collateral/field-level-encryption
+
 
 ## CSFLE Multi Cloud Environments MDBW22 Video
 https://www.youtube.com/watch?v=bfyxplG1DVg&list=PL4RCxklHWZ9tKWSS21BmtFxOs51f-l1o9&index=33&t=9s
